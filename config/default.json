@@ -1,3 +1,4 @@
 {
-    "mongoURI":"mongodb+srv://dom123:dom123@mern-pgh0l.mongodb.net/test?retryWrites=true&w=majority"
+    "mongoURI":"mongodb+srv://dom123:dom123@mern-pgh0l.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "myscerettoken"
 }
