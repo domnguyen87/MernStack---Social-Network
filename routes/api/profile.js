@@ -44,7 +44,7 @@ router.post(
     ],
     async (req, res) => {
         const errors = validationResult(req);
-        if(!errors.isEmpty()){
+        if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
 
@@ -96,12 +96,57 @@ router.post(
                 );
 
                 return res.join(profile);
-            } catch (err) {
-                console.log(err.message);
-                res.status(500).send('Server Error ')
             }
+            //Create
+            profile = new Profile(profileFields);
+
+            await profile.save();
+            res.json(profile);
+
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).send('Server Error ')
         }
+    });
+
+//@route    GET api/profile
+//@desc     Get All profile
+//@access   public
+router.get('/', async (req, res) => {
+    try {
+        const profiles = await Profile.find().pop('user', ['name', 'avatar']);
+        res.json(profiles);
+    } catch (err) {
+        console.log(err.message)
+        res.status(500).send('Server Error')
+        
     }
-)
+})
+
+//@route    GET api/profile/user/:user_id
+//@desc     Get profile by user ID
+//@access   public
+router.get('/user/:user_id', async (req, res) => {
+    try {
+        const profile = await Profile.findOne({ user: req.params.user_id }).pop('user', ['name', 'avatar']);
+        
+        if(!profile) return  res.status(400).json({ msg: 'There is no profile for this user'})
+
+        res.json(profile);
+    } catch (err) {
+        console.log(err.message)
+
+        //relplcate error message
+        if (err.kind == 'ObjectId') {
+            return res.status(400).json({ msg: 'There is no profile for this user' })
+
+        }
+        res.status(500).send('Server Error')
+
+    }
+})
+
+
+
 
 module.exports = router;
