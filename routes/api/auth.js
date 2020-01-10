@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs')
 
 
-const User = require('../../models/Users')
+const User = require('../../models/User')
 
 //@route    GET api/auth
 //@desc     Test route
@@ -55,7 +55,7 @@ router.post(
                     .json({ errors: [{ msg: 'Invalid Credentials' }] });
             }
 
-            
+
 
             //Return jsonwebtoken
             const payload = {
