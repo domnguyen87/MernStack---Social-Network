@@ -114,11 +114,11 @@ router.post(
 //@access   public
 router.get('/', async (req, res) => {
     try {
-        const profiles = await Profile.find().pop('user', ['name', 'avatar']);
+        const profiles = await Profile.find().populate('user', ['name', 'avatar']);
         res.json(profiles);
     } catch (err) {
         console.log(err.message)
-        res.status(500).send('Server Error')
+        res.status(500).send('Cannot get all users')
         
     }
 })
@@ -128,7 +128,7 @@ router.get('/', async (req, res) => {
 //@access   public
 router.get('/user/:user_id', async (req, res) => {
     try {
-        const profile = await Profile.findOne({ user: req.params.user_id }).pop('user', ['name', 'avatar']);
+        const profile = await Profile.findOne({ user: req.params.user_id }).populate('user', ['name', 'avatar']);
         
         if(!profile) return  res.status(400).json({ msg: 'There is no profile for this user'})
 
@@ -158,7 +158,7 @@ router.delete('/', auth, async (req, res) => {
         //Remove User
         await User.findOneAndRemove({ _id: req.user.id })
 
-        res.json(msg: "User deleted");
+        res.json({msg: "User deleted"});
     } catch (err) {
         console.log(err.message)
         res.status(500).send('Server Error')
@@ -171,7 +171,7 @@ router.delete('/', auth, async (req, res) => {
 //@access   private
 router.put('/experience', [auth, [
     check('title', 'Title is req').not().isEmpty(),
-    check('comapny', 'Company is req').not().isEmpty(),
+    check('company', 'Company is req').not().isEmpty(),
     check('from', 'From date is req').not().isEmpty(),
 ]], async (req, res) => {
         const errors = validationResult(req);
@@ -206,11 +206,11 @@ router.put('/experience', [auth, [
 
             await profile.save();
             
-            res.json(prfile); 
+            res.json(profile); 
 
         } catch (err) {
             console.log(err.message);
-            res.status(500).send('Server Error');
+            res.status(500).send('experience not added');
             
         }
 
@@ -219,8 +219,8 @@ router.put('/experience', [auth, [
 //@route    DELETE api/profile/experience/:exp_id
 //@desc     Delete profile experience
 //@access   private
-router.delete('/experience/:exp_id', auth, (req, res));
-try {
+router.delete('/experience/:exp_id', auth, async (req, res) => {
+    try {
     const profile = await Profile.findOne({ user: req.user.id })
 
     //Get remove Index
@@ -238,6 +238,8 @@ try {
     console.log(err.message);
     res.status(500).send('Server Error');
 }
+});
+
 
 
 
