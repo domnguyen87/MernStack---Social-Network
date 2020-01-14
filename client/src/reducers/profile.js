@@ -1,7 +1,8 @@
 import {
     GET_PROFILE,
     PROFILE_ERROR,
-    CLEAR_PROFILE
+    CLEAR_PROFILE,
+    GET_PROFILES
     
 } from '../actions/types';        
 
@@ -23,6 +24,12 @@ export default function(state = initialState, action) {
                 ...state,
                 profile: payload,
                 loading: false
+            }
+        case GET_PROFILES:
+            return {
+                ...state,
+                profile: payload,
+                loading:false
             }
         case PROFILE_ERROR:
             return {
