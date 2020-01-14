@@ -1,0 +1,6 @@
+{
+    "mongoURI": "mongodb+srv://dom123:dom123@mern-pgh0l.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "myscerettoken",
+    "githubClientId": "55bcb1757b42cb71becb",
+    "githubSecret": "dbe26e5c8f1b6800c90ff718c2591e046a50750c"
+}
